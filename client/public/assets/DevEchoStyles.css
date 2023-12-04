@@ -216,12 +216,12 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-label {
+.registration-form label {
     display: block;
     margin-bottom: 8px;
 }
 
-input {
+.registration-form input {
     width: 100%;
     padding: 8px;
     margin-bottom: 16px;
@@ -229,7 +229,7 @@ input {
     border-radius: 10px;
 }
 
-button {
+.registration-form button {
     background-color: #007bff;
     color: #fff;
     padding: 10px;
@@ -282,6 +282,74 @@ footer {
 }
 
 /*Footer End*/
+
+/*Login*/
+/* Reuse these styles from the registration form example */
+
+/* Login Page Styles */
+/* Add these styles to your existing CSS */
+
+/* Improved Login Page Styles */
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 32px;
+    height: 100vh;
+    background-color: #f5f5f5; /* Light background color */
+}
+
+.login-container {
+    width: 300px;
+    text-align: center;
+    padding: 20px;
+    background-color: #fff; /* White container background */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.login-container h1 {
+    color: #333; /* Dark header text color */
+}
+
+.login-container .tagline {
+    color: #555; /* Slightly darker tagline text color */
+    margin-bottom: 20px;
+}
+
+.login-form label {
+    display: block;
+    text-align: left;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.login-form button {
+    background-color: #007bff; /* Vibrant button color */
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Media Queries for Responsiveness */
+@media screen and (max-width: 768px) {
+    .login-container {
+        width: 90%;
+    }
+}
+
+/*Login ENd*/
 
 /*dev Css End*/
 

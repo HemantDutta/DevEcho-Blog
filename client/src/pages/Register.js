@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
+import {Link} from "react-router-dom";
 
 export const Register = () => {
     const [formData, setFormData] = useState({
@@ -75,6 +76,9 @@ export const Register = () => {
 
                     <button type="submit">Register</button>
                 </form>
+                <div className="exists">
+                    <Link to={"/login"}>Already have an account?</Link>
+                </div>
             </div>
             {/*  Footer  */}
             <Footer/>
