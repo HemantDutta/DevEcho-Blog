@@ -6,12 +6,15 @@ export const Navbar = () => {
             <nav>
                 <div className="navbar-container">
                     <div className="navbar-left">
-                        <span className="logo"></span>
+                        <span className="logo">DevEcho</span>
                     </div>
                     <div className="navbar-right">
                         <Link to={"/"}>Home</Link>
                         <Link to={"/about"}>About</Link>
                         <Link to={"/contact"}>Contact Us</Link>
+                    </div>
+                    <div className="navbar-ham">
+                        <button type="button"><i className="fa-solid fa-bars"/></button>
                     </div>
                 </div>
             </nav>
