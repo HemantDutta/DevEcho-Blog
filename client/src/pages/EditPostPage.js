@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
 
-function CreatePostPage() {
+function EditPostPage() {
     const [postData, setPostData] = useState({
-        title: '',
-        content: '',
-        tags: ''
+        title: 'Sample Post Title', // Sample data for demonstration
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget justo vel justo luctus congue.',
+        tags: '',
     });
 
     const handleChange = (e) => {
@@ -19,16 +19,16 @@ function CreatePostPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('New Post Data:', postData);
+        // Add your logic to handle the submission of the edited post data
+        console.log('Edited Post Data:', postData);
     };
 
     return (
         <>
             <Navbar/>
-            <div className="create-post-page">
+            <div className="edit-post-page">
                 <header className="header">
-                    <h1>Create a New Post</h1>
-                    <p className="tagline">Empower the community with your knowledge and insights!</p>
+                    <h1>Edit Post</h1>
                 </header>
 
                 <form onSubmit={handleSubmit} className="post-form">
@@ -61,12 +61,12 @@ function CreatePostPage() {
                         required
                     />
 
-                    <button type="submit">Create Post</button>
+                    <button type="submit">Save Changes</button>
                 </form>
             </div>
             <Footer/>
         </>
-    );
+    )
 }
 
-export default CreatePostPage;
+export default EditPostPage;

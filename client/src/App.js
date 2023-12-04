@@ -6,6 +6,7 @@ import {Register} from "./pages/Register";
 import {Login} from "./pages/Login";
 import {Dashboard} from "./pages/Dashboard";
 import CreatePostPage from "./pages/CreatePostPage";
+import EditPostPage from "./pages/EditPostPage";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                     <Route path={"/login"} element={<Login/>}/>
                     <Route path={"/dashboard"} element={<Dashboard/>}/>
                     <Route path={"/new-post"} element={<CreatePostPage/>}/>
+                    <Route path={"/edit-post"} element={<EditPostPage/>}/>
                 </Routes>
             </BrowserRouter>
         </>

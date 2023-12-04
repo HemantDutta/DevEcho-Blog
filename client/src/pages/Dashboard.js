@@ -5,8 +5,8 @@ import {Link} from "react-router-dom";
 export const Dashboard = () => {
     // Dummy data for previously made posts
     const previousPosts = [
-        {id: 1, title: 'Blog Post 1', content: 'Lorem ipsum dolor sit amet...'},
-        {id: 2, title: 'Blog Post 2', content: 'Consectetur adipiscing elit...'},
+        {id: 1, title: 'Blog Post 1', content: 'Lorem ipsum dolor sit amet...', tags: 'hello, bye, yo'},
+        {id: 2, title: 'Blog Post 2', content: 'Consectetur adipiscing elit...', tags: 'hello, bye, yo'},
         // Add more posts as needed
     ];
     return (
@@ -27,9 +27,21 @@ export const Dashboard = () => {
                         <div key={post.id} className="post-card">
                             <h2>{post.title}</h2>
                             <p>{post.content}</p>
-                            {/* Additional details or actions can be added here */}
+                            <p>{post.tags}</p>
+                            <div className="options">
+                                <Link to={"/edit-post"} className="edit-post">Edit</Link>
+                                <button type="button" className="del-post">Delete</button>
+                            </div>
                         </div>
                     ))}
+                </div>
+
+                <div className="confirm-del">
+                    <span className="head">Confirm Delete?</span>
+                    <div className="options">
+                        <button type="button" className="del">Delete</button>
+                        <button type="button">Cancel</button>
+                    </div>
                 </div>
             </div>
             {/*  Footer   */}

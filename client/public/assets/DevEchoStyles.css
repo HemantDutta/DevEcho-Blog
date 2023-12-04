@@ -122,6 +122,56 @@ body {
     padding: 50px;
 }
 
+.feed .search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 25px 0 50px;
+}
+
+.feed .search .left {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.feed .search .left label {
+    font-size: 20px;
+}
+
+.feed .search .left input {
+    padding: 10px 24px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+.feed .search .right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.feed .search .right span {
+    font-size: 18px;
+}
+
+.feed .search .right .button-group button {
+    border: none;
+    font-size: 20px;
+    padding: 10px 16px;
+    cursor: pointer;
+    background-color: #efefef;
+    transition: all 0.2s ease;
+}
+
+.feed .search .right .button-group button.active {
+    background-color: #bfbfbf;
+}
+
+.feed .search .right .button-group button:hover {
+    background-color: #cfcfcf;
+}
+
 .feed-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -392,8 +442,74 @@ footer {
     transition: transform 0.3s ease-in-out;
 }
 
+.post-card .options {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.post-card .options .del-post {
+    background-color: red;
+    padding: 10px 24px;
+    color: white;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.post-card .edit-post {
+    background-color: #007bff;
+    padding: 8px 24px;
+    color: white;
+    text-decoration: none;
+}
+
 .post-card:hover {
     transform: scale(1.05);
+}
+
+.confirm-del {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: max-content;
+    height: max-content;
+    padding: 32px;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    background-color: #fff;
+    box-shadow: 0 0 2px black;
+    z-index: 150;
+    display: none;
+}
+
+.confirm-del.active {
+    display: flex;
+}
+
+.confirm-del .options {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.confirm-del .options button {
+    padding: 10px 24px;
+    border-radius: 10px;
+    border: none;
+}
+
+.confirm-del .options button.del {
+    background-color: red;
+    color: white;
+}
+
+.confirm-del .head {
+    font-size: 32px;
+    font-weight: bold;
 }
 
 /*Dashboard End*/
@@ -406,6 +522,7 @@ footer {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
+    min-height: 100vh;
 }
 
 .header {
@@ -457,6 +574,63 @@ footer {
 }
 
 /*Create Post End*/
+
+/*Edit Post*/
+/* Add these styles to your existing CSS */
+
+/* Edit Post Page Styles */
+.edit-post-page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    color: #333;
+}
+
+.post-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.post-form input,
+.post-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.post-form textarea {
+    resize: vertical; /* Allow vertical resizing of the textarea */
+}
+
+.post-form button {
+    background-color: #007bff; /* Vibrant button color */
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Media Queries for Responsiveness */
+@media screen and (max-width: 768px) {
+    .edit-post-page {
+        padding: 10px;
+    }
+}
+
+/*Edit Post end*/
 
 /*dev Css End*/
 
