@@ -16,6 +16,25 @@ export const Dashboard = () => {
     //States
     const [user, setUser] = useState([]);
     const [posts, setPosts] = useState([]);
+    const [currId, setCurrId] = useState('');
+
+    //Err
+    let err = document.getElementById("err");
+
+    //Fetch Posts
+    function fetchPosts() {
+        axios.post("http://localhost:5000/fetch-user-posts", {
+            user_id: user.id
+        })
+            .then((res) => {
+                if(res.data === "no_data") {
+                    setPosts([]);
+                }
+                else {
+                    setPosts(res.data);
+                }
+            });
+    }
 
     //Check Login and fetch Posts
     useEffect(() => {
@@ -26,7 +45,6 @@ export const Dashboard = () => {
                 em: em
             })
                 .then((res) => {
-                    console.log(res.data);
                     if (res.data === "no-acc") {
                         nav("/login");
                     } else {
@@ -45,7 +63,12 @@ export const Dashboard = () => {
                 user_id: user.id
             })
                 .then((res) => {
-                    setPosts(res.data);
+                    if(res.data === "no_data") {
+                        setPosts([]);
+                    }
+                    else {
+                        setPosts(res.data);
+                    }
                 });
         }
         if (first.current) {
@@ -54,6 +77,38 @@ export const Dashboard = () => {
             fetchUserData();
         }
     }, [user])
+
+    //Toggle Delete Box
+    function toggleDel(x) {
+        let conDel = document.getElementById("conDel");
+        setCurrId(x);
+        if (conDel.classList.contains("active")) {
+            conDel.classList.remove("active");
+        } else {
+            conDel.classList.add("active");
+        }
+    }
+
+    //Delete Post
+    function delPost() {
+        axios.post("http://localhost:5000/del-post", {
+            id: currId
+        })
+            .then((res) => {
+                if (res.data === "error") {
+                    err.innerText = "Couldn't Delete Post! Try again!";
+                    toggleDel(0);
+                } else {
+                    err.innerText = "Post Deleted Successfully!";
+                    toggleDel(0);
+                    fetchPosts();
+                    setTimeout(()=>{
+                        err.innerText = "";
+                        console.log(posts);
+                    },2000)
+                }
+            });
+    }
 
     return (
         <>
@@ -79,7 +134,10 @@ export const Dashboard = () => {
                                 <p>{value.tags}</p>
                                 <div className="options">
                                     <Link to={"/edit-post"} state={value.id} className="edit-post">Edit</Link>
-                                    <button type="button" className="del-post">Delete</button>
+                                    <button type="button" onClick={() => {
+                                        toggleDel(value.id)
+                                    }} className="del-post">Delete
+                                    </button>
                                 </div>
                             </div>
                         ))
@@ -89,12 +147,16 @@ export const Dashboard = () => {
                         <h2>No Posts Found</h2>
                     }
                 </div>
+                <p id="err"></p>
 
-                <div className="confirm-del">
+                <div className="confirm-del" id="conDel">
                     <span className="head">Confirm Delete?</span>
                     <div className="options">
-                        <button type="button" className="del">Delete</button>
-                        <button type="button">Cancel</button>
+                        <button type="button" className="del" onClick={delPost}>Delete</button>
+                        <button type="button" onClick={() => {
+                            toggleDel(0)
+                        }}>Cancel
+                        </button>
                     </div>
                 </div>
             </div>

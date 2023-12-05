@@ -2,12 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
 import axios from "axios";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 function CreatePostPage() {
 
     //Get ID
     let id = useLocation().state;
+
+    //Nav
+    let nav = useNavigate();
 
     const [postData, setPostData] = useState({
         title: '',
@@ -37,6 +40,7 @@ function CreatePostPage() {
                     err.innerText = "New Post Created!";
                     setTimeout(()=>{
                         err.innerText = "";
+                        nav("/dashboard");
                     },2000);
                }
             });

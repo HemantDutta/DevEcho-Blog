@@ -501,6 +501,7 @@ footer {
     padding: 10px 24px;
     border-radius: 10px;
     border: none;
+    cursor: pointer;
 }
 
 .confirm-del .options button.del {
