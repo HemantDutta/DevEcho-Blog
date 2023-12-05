@@ -27,10 +27,9 @@ export const Dashboard = () => {
             user_id: user.id
         })
             .then((res) => {
-                if(res.data === "no_data") {
+                if (res.data === "no_data") {
                     setPosts([]);
-                }
-                else {
+                } else {
                     setPosts(res.data);
                 }
             });
@@ -63,10 +62,9 @@ export const Dashboard = () => {
                 user_id: user.id
             })
                 .then((res) => {
-                    if(res.data === "no_data") {
+                    if (res.data === "no_data") {
                         setPosts([]);
-                    }
-                    else {
+                    } else {
                         setPosts(res.data);
                     }
                 });
@@ -102,10 +100,10 @@ export const Dashboard = () => {
                     err.innerText = "Post Deleted Successfully!";
                     toggleDel(0);
                     fetchPosts();
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         err.innerText = "";
                         console.log(posts);
-                    },2000)
+                    }, 2000)
                 }
             });
     }
@@ -120,11 +118,9 @@ export const Dashboard = () => {
                     <h1>Welcome, {user.name}</h1>
                     <p>Email: {user.email}</p>
                 </div>
-
                 <Link to={"/new-post"} state={user.id} className="new-post-button">Create New Blog Post</Link>
-
+                <p>Total posts: {posts.length}</p>
                 <div className="post-grid">
-
                     {
                         posts.length !== 0 &&
                         posts.map((value, index) => (

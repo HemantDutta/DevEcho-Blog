@@ -1,26 +1,93 @@
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
 import {Link} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 
 export const Home = () => {
 
     //states
     const [posts, setPosts] = useState([]);
+    const [relPosts, setRelPosts] = useState([]);
+    const [search, setSearch] = useState('');
+    const [active, setActive] = useState(false);
+    const [cri, setCri] = useState('');
+
+    //Err
+    let err = document.getElementById("err");
+
+    //Refs
+    const first = useRef(true);
 
     //Fetch Posts
     useEffect(() => {
         const fetchPosts = () => {
             axios.get("http://localhost:5000/fetch-posts")
                 .then((res) => {
-                    if(res.data === "no_data") setPosts([]);
+                    if (res.data === "no_data") setPosts([]);
                     else setPosts(res.data);
                 });
         }
 
         fetchPosts();
     }, [])
+
+    //Search Function
+    function searchPosts() {
+        if (search) {
+            setActive(true);
+            axios.post("http://localhost:5000/search", {
+                search: search
+            })
+                .then((res) => {
+                    if (res.data === "no_data") {
+                        setRelPosts([]);
+                    } else {
+                        setRelPosts(res.data);
+                    }
+                })
+        } else {
+            err.innerText = "Please enter a keyword!"
+        }
+    }
+
+    //Set Sorting Criteria
+    function setCriteria(x) {
+        setCri(x);
+    }
+
+    //sort by relevance after searching
+    useEffect(() => {
+        const sortRel = () => {
+            if (cri === "rel") {
+                let lowSearch = search.toLowerCase();
+                const rankedPosts = relPosts.map((curr) => {
+                    let points = 0;
+
+                    if (curr.title.toLowerCase().includes(lowSearch)) points += 2;
+                    if (curr.content.toLowerCase().includes(lowSearch)) points += 4;
+                    if (curr.tags.toLowerCase().includes(lowSearch)) points += 2;
+
+                    return {...curr, points};
+                }).sort((a, b) => b.points - a.points);
+                setRelPosts(rankedPosts);
+            }
+            if (cri === "date") {
+
+            }
+            if (cri === "cat") {
+
+            }
+        }
+
+        if (first.current) {
+            first.current = false;
+        } else {
+            if (active) {
+                sortRel();
+            }
+        }
+    }, [relPosts, cri])
 
     return (
         <>
@@ -42,15 +109,34 @@ export const Home = () => {
                     <section className="feed">
                         <div className="search">
                             <div className="left">
-                                <label htmlFor="search">Search</label>
-                                <input type="text" name="search" id="search" placeholder="Search..."/>
+                                <form>
+                                    <label htmlFor="search">Search</label>
+                                    <input type="text" name="search" id="search" placeholder="Search..." onChange={(e) => {
+                                        setSearch(e.target.value)
+                                    }}/>
+                                </form>
+                                <button type="button" onClick={searchPosts}>Search</button>
+                                <button type="button" onClick={() => {
+                                    setActive(false)
+                                }}>Clear Search
+                                </button>
+                                <p id="err"></p>
                             </div>
                             <div className="right">
                                 <span>Order by:</span>
                                 <div className="button-group">
-                                    <button type="button">Date</button>
-                                    <button type="button">Relevance</button>
-                                    <button type="button">Categories</button>
+                                    <button type="button" className={cri === 'date' ? 'active' : ''} onClick={() => {
+                                        setCriteria("date")
+                                    }}>Date
+                                    </button>
+                                    <button type="button" className={cri === 'rel' ? 'active' : ''} onClick={() => {
+                                        setCriteria("rel")
+                                    }}>Relevance
+                                    </button>
+                                    <button type="button" className={cri === 'cat' ? 'active' : ''} onClick={() => {
+                                        setCriteria("cat")
+                                    }}>Categories
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -58,13 +144,37 @@ export const Home = () => {
                         <div className="feed-grid">
                             {/* Card 1 */}
                             {
+                                !active &&
                                 posts.map(((value, index) => {
                                     return (
                                         <div className="card" key={index}>
-                                            <img src="post1-image.jpg" alt="Blog Post 1"/>
+                                            <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Blog Post 1"/>
                                             <h2>{value.title}</h2>
                                             <p className="description">{value.content.substring(0, 25)}</p>
-                                            <p className="description">{value.tags}</p>
+                                            <p className="description">Tags: {value.tags}</p>
+                                            <p className="description">Category: {value.category}</p>
+                                            <div className="feedback">
+                                                <button className="like-button">Like</button>
+                                                <button className="dislike-button">Dislike</button>
+                                            </div>
+                                        </div>
+                                    )
+                                }))
+                            }
+                            {
+                                active && relPosts.length === 0 &&
+                                <h2>Loading...</h2>
+                            }
+                            {
+                                active && relPosts.length !== 0 &&
+                                relPosts.map(((value, index) => {
+                                    return (
+                                        <div className="card" key={index}>
+                                            <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Blog Post 1"/>
+                                            <h2>{value.title}</h2>
+                                            <p className="description">{value.content.substring(0, 25)}</p>
+                                            <p className="description">Tags: {value.tags}</p>
+                                            <p className="description">Category: {value.category}</p>
                                             <div className="feedback">
                                                 <button className="like-button">Like</button>
                                                 <button className="dislike-button">Dislike</button>
@@ -75,7 +185,7 @@ export const Home = () => {
                             }
                             {
                                 posts.length === 0 &&
-                                <h2>No Posts yet!</h2>
+                                <h2>No Posts Found!</h2>
                             }
                         </div>
                     </section>

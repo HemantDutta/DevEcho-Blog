@@ -136,6 +136,19 @@ body {
     gap: 10px;
 }
 
+.feed .search .left form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.feed .search .left button {
+    border: none;
+    padding: 10px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
 .feed .search .left label {
     font-size: 20px;
 }
@@ -548,7 +561,7 @@ footer {
 
 .post-form input,
 .post-form textarea,
-.post-form select{
+.post-form select {
     width: 100%;
     padding: 10px;
     margin-bottom: 16px;
