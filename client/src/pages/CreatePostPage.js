@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
-import axios from "axios";
+import axios, {options} from "axios";
 import {useLocation, useNavigate} from "react-router-dom";
 
 function CreatePostPage() {
@@ -12,6 +12,7 @@ function CreatePostPage() {
     //Nav
     let nav = useNavigate();
 
+    //States
     const [postData, setPostData] = useState({
         title: '',
         content: '',
@@ -20,6 +21,9 @@ function CreatePostPage() {
         user_id: id
     });
 
+    const [cat, setCat] = useState([]);
+
+    //handle Input Change
     const handleChange = (e) => {
         const {name, value} = e.target;
         setPostData({
@@ -33,18 +37,29 @@ function CreatePostPage() {
         let err = document.getElementById("err");
         axios.post("http://localhost:5000/create-post", postData)
             .then((res) => {
-               if(res.data === "error") {
+                if (res.data === "error") {
                     err.innerText = "Something went wrong! Try again!";
-               }
-               else if (res.data === "success") {
+                } else if (res.data === "success") {
                     err.innerText = "New Post Created!";
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         err.innerText = "";
                         nav("/dashboard");
-                    },2000);
-               }
+                    }, 2000);
+                }
             });
     };
+
+    //Get Categories
+    useEffect(() => {
+        const getCategory = () => {
+            axios.get("http://localhost:5000/get-categories")
+                .then((res) => {
+                    setCat(res.data);
+                });
+        }
+
+        getCategory();
+    }, [])
 
     return (
         <>
@@ -88,9 +103,13 @@ function CreatePostPage() {
                     <label htmlFor="category">Categories</label>
                     <select name="category" id="category" onChange={handleChange}>
                         <option value="#">Select a category</option>
-                        <option value="ct1">Category 1</option>
-                        <option value="ct2">Category 2</option>
-                        <option value="ct3">Category 3</option>
+                        {
+                            cat.map(((value, index) => {
+                                return (
+                                    <option value={value.category}>{value.category}</option>
+                                )
+                            }))
+                        }
                     </select>
 
                     <button type="submit">Create Post</button>

@@ -12,7 +12,9 @@ function EditPostPage() {
     //Get Post ID
     let post_id = useLocation().state;
 
+    //States
     const [postData, setPostData] = useState([]);
+    const [cat, setCat] = useState([]);
 
     let err = document.getElementById("err");
 
@@ -46,13 +48,25 @@ function EditPostPage() {
                 if (res.data === "error") {
                     err.innerText = "Something went wrong!";
                 } else {
-                   err.innerText = "Post Edited Successfully!";
-                   setTimeout(()=>{
+                    err.innerText = "Post Edited Successfully!";
+                    setTimeout(() => {
                         nav("/dashboard");
-                   },2000)
+                    }, 2000)
                 }
             });
     };
+
+    //Get Categories
+    useEffect(() => {
+        const getCategory = () => {
+            axios.get("http://localhost:5000/get-categories")
+                .then((res) => {
+                    setCat(res.data);
+                });
+        }
+
+        getCategory();
+    }, [])
 
     return (
         <>
@@ -96,9 +110,13 @@ function EditPostPage() {
                     <select name="categories" id="categories">
                         <option value="#">Select a category</option>
                         <option value={postData.category} selected="true">{postData.category}</option>
-                        <option value="#">Category 1</option>
-                        <option value="#">Category 2</option>
-                        <option value="#">Category 3</option>
+                        {
+                            cat.map(((value, index) => {
+                                return (
+                                    <option value={value.category} key={index}>{value.category}</option>
+                                )
+                            }))
+                        }
                     </select>
 
                     <button type="submit">Save Changes</button>

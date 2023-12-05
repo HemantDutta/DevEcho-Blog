@@ -14,8 +14,8 @@ export const Home = () => {
         const fetchPosts = () => {
             axios.get("http://localhost:5000/fetch-posts")
                 .then((res) => {
-                    console.log(res.data);
-                    setPosts(res.data);
+                    if(res.data === "no_data") setPosts([]);
+                    else setPosts(res.data);
                 });
         }
 
@@ -72,6 +72,10 @@ export const Home = () => {
                                         </div>
                                     )
                                 }))
+                            }
+                            {
+                                posts.length === 0 &&
+                                <h2>No Posts yet!</h2>
                             }
                         </div>
                     </section>
