@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
+import axios from "axios";
 
 function EditPostPage() {
     const [postData, setPostData] = useState({
@@ -19,8 +20,6 @@ function EditPostPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Add your logic to handle the submission of the edited post data
-        console.log('Edited Post Data:', postData);
     };
 
     return (
@@ -60,6 +59,14 @@ function EditPostPage() {
                         onChange={handleChange}
                         required
                     />
+
+                    <label htmlFor="categories">Categories</label>
+                    <select name="categories" id="categories">
+                        <option value="#">Select a category</option>
+                        <option value="#">Category 1</option>
+                        <option value="#">Category 2</option>
+                        <option value="#">Category 3</option>
+                    </select>
 
                     <button type="submit">Save Changes</button>
                 </form>

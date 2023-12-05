@@ -1,8 +1,27 @@
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
 import {Link} from "react-router-dom";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 export const Home = () => {
+
+    //states
+    const [posts, setPosts] = useState([]);
+
+    //Fetch Posts
+    useEffect(() => {
+        const fetchPosts = () => {
+            axios.get("http://localhost:5000/fetch-posts")
+                .then((res) => {
+                    console.log(res.data);
+                    setPosts(res.data);
+                });
+        }
+
+        fetchPosts();
+    }, [])
+
     return (
         <>
             {/*Header*/}
@@ -17,7 +36,6 @@ export const Home = () => {
                         </header>
                         <p className="tagline">Explore the world of development through insightful blog posts.</p>
                         <Link to={"/register"} className="cta-button">Get Started</Link>
-                        <img src="hero-image.jpg" alt="Hero Image"/>
                     </section>
 
                     {/* Feed Section */}
@@ -39,76 +57,22 @@ export const Home = () => {
                         {/* Responsive Grid */}
                         <div className="feed-grid">
                             {/* Card 1 */}
-                            <div className="card">
-                                <img src="post1-image.jpg" alt="Blog Post 1"/>
-                                <h2>Blog Post Title 1</h2>
-                                <p className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget justo vel justo luctus congue.</p>
-                                <p className="description">Hello, bye, yo</p>
-                                <div className="feedback">
-                                    <button className="like-button">Like</button>
-                                    <button className="dislike-button">Dislike</button>
-                                </div>
-                            </div>
-                            <div className="card">
-                                <img src="post1-image.jpg" alt="Blog Post 1"/>
-                                <h2>Blog Post Title 1</h2>
-                                <p className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget justo vel justo luctus congue.</p>
-                                <p className="description">Hello, bye, yo</p>
-                                <div className="feedback">
-                                    <button className="like-button">Like</button>
-                                    <button className="dislike-button">Dislike</button>
-                                </div>
-                            </div>
-                            <div className="card">
-                                <img src="post1-image.jpg" alt="Blog Post 1"/>
-                                <h2>Blog Post Title 1</h2>
-                                <p className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget justo vel justo luctus congue.</p>
-                                <p className="description">Hello, bye, yo</p>
-                                <div className="feedback">
-                                    <button className="like-button">Like</button>
-                                    <button className="dislike-button">Dislike</button>
-                                </div>
-                            </div>
-                            <div className="card">
-                                <img src="post1-image.jpg" alt="Blog Post 1"/>
-                                <h2>Blog Post Title 1</h2>
-                                <p className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget justo vel justo luctus congue.</p>
-                                <p className="description">Hello, bye, yo</p>
-                                <div className="feedback">
-                                    <button className="like-button">Like</button>
-                                    <button className="dislike-button">Dislike</button>
-                                </div>
-                            </div>
-                            <div className="card">
-                                <img src="post1-image.jpg" alt="Blog Post 1"/>
-                                <h2>Blog Post Title 1</h2>
-                                <p className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget justo vel justo luctus congue.</p>
-                                <p className="description">Hello, bye, yo</p>
-                                <div className="feedback">
-                                    <button className="like-button">Like</button>
-                                    <button className="dislike-button">Dislike</button>
-                                </div>
-                            </div>
-                            <div className="card">
-                                <img src="post1-image.jpg" alt="Blog Post 1"/>
-                                <h2>Blog Post Title 1</h2>
-                                <p className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget justo vel justo luctus congue.</p>
-                                <p className="description">Hello, bye, yo</p>
-                                <div className="feedback">
-                                    <button className="like-button">Like</button>
-                                    <button className="dislike-button">Dislike</button>
-                                </div>
-                            </div>
-                            <div className="card">
-                                <img src="post1-image.jpg" alt="Blog Post 1"/>
-                                <h2>Blog Post Title 1</h2>
-                                <p className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget justo vel justo luctus congue.</p>
-                                <p className="description">Hello, bye, yo</p>
-                                <div className="feedback">
-                                    <button className="like-button">Like</button>
-                                    <button className="dislike-button">Dislike</button>
-                                </div>
-                            </div>
+                            {
+                                posts.map(((value, index) => {
+                                    return (
+                                        <div className="card" key={index}>
+                                            <img src="post1-image.jpg" alt="Blog Post 1"/>
+                                            <h2>{value.title}</h2>
+                                            <p className="description">{value.content.substring(0, 25)}</p>
+                                            <p className="description">{value.tags}</p>
+                                            <div className="feedback">
+                                                <button className="like-button">Like</button>
+                                                <button className="dislike-button">Dislike</button>
+                                            </div>
+                                        </div>
+                                    )
+                                }))
+                            }
                         </div>
                     </section>
                 </div>

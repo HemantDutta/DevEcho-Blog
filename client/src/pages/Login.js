@@ -2,6 +2,7 @@ import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
 import {useState} from "react";
 import {Link} from "react-router-dom";
+import axios from "axios";
 
 export const Login = () => {
     const [formData, setFormData] = useState({
@@ -19,7 +20,10 @@ export const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
+        axios.post("http://localhost:5000/log-in", formData)
+            .then((res)=>{
+                console.log(res.data);
+            });
     }
     return (
         <>

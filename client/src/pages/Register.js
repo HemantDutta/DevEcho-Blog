@@ -2,6 +2,7 @@ import {useState} from "react";
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
 import {Link} from "react-router-dom";
+import axios from "axios";
 
 export const Register = () => {
     const [formData, setFormData] = useState({
@@ -19,8 +20,12 @@ export const Register = () => {
         });
     };
 
-    function handleSubmit() {
-
+    function handleSubmit(e) {
+        e.preventDefault();
+        axios.post("http://localhost:5000/sign-up", formData)
+            .then((res) => {
+                console.log(res.data);
+            });
     }
 
     return (

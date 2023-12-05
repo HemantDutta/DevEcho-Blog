@@ -3,12 +3,14 @@ import {Footer} from "../components/Footer";
 import {Link} from "react-router-dom";
 
 export const Dashboard = () => {
-    // Dummy data for previously made posts
+
     const previousPosts = [
         {id: 1, title: 'Blog Post 1', content: 'Lorem ipsum dolor sit amet...', tags: 'hello, bye, yo'},
         {id: 2, title: 'Blog Post 2', content: 'Consectetur adipiscing elit...', tags: 'hello, bye, yo'},
-        // Add more posts as needed
     ];
+
+
+    
     return (
         <>
             {/*Header */}

@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
+import axios from "axios";
 
 function CreatePostPage() {
     const [postData, setPostData] = useState({
         title: '',
         content: '',
-        tags: ''
+        tags: '',
+        category: ''
     });
 
     const handleChange = (e) => {
@@ -19,7 +21,10 @@ function CreatePostPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('New Post Data:', postData);
+        axios.post("http://localhost:5000/create-post", postData)
+            .then((res) => {
+               console.log(res.data);
+            });
     };
 
     return (
@@ -60,6 +65,14 @@ function CreatePostPage() {
                         onChange={handleChange}
                         required
                     />
+
+                    <label htmlFor="category">Categories</label>
+                    <select name="category" id="category" onChange={handleChange}>
+                        <option value="#">Select a category</option>
+                        <option value="ct1">Category 1</option>
+                        <option value="ct2">Category 2</option>
+                        <option value="ct3">Category 3</option>
+                    </select>
 
                     <button type="submit">Create Post</button>
                 </form>
