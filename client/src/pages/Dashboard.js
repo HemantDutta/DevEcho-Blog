@@ -1,16 +1,49 @@
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {getCookie} from "../config/CookieMaster";
 
 export const Dashboard = () => {
 
-    const previousPosts = [
-        {id: 1, title: 'Blog Post 1', content: 'Lorem ipsum dolor sit amet...', tags: 'hello, bye, yo'},
-        {id: 2, title: 'Blog Post 2', content: 'Consectetur adipiscing elit...', tags: 'hello, bye, yo'},
-    ];
+    //Navigator
+    let nav = useNavigate();
 
+    //States
+    const [user, setUser] = useState([]);
+    const [posts, setPosts] = useState([]);
 
-    
+    //Check Login and fetch Posts
+    useEffect(() => {
+        const fetchData = () => {
+            const em = getCookie("em");
+            if (!em) nav("/login");
+            axios.post("http://localhost:5000/fetch-user", {
+                em: em
+            })
+                .then((res) => {
+                    console.log(res.data);
+                    if (res.data === "no-acc") {
+                        nav("/login");
+                    } else {
+                        setUser(res.data);
+                    }
+                });
+        };
+
+        const fetchUserData = () => {
+            axios.post("http://localhost:5000/fetch-user-posts", {
+                user_id: user.id
+            })
+                .then((res) => {
+                    setPosts(res.data);
+                });
+        }
+
+        fetchData();
+    }, [])
+
     return (
         <>
             {/*Header */}
@@ -18,24 +51,32 @@ export const Dashboard = () => {
             {/*Header End*/}
             <div className="dashboard">
                 <div className="user-info">
-                    <h1>Welcome, User!</h1>
-                    <p>Email: user@gmail.com</p>
+                    <h1>Welcome, {user.name}</h1>
+                    <p>Email: {user.email}</p>
                 </div>
 
-                <Link to={"/new-post"} className="new-post-button">Create New Blog Post</Link>
+                <Link to={"/new-post"} state={user.id} className="new-post-button">Create New Blog Post</Link>
 
                 <div className="post-grid">
-                    {previousPosts.map((post) => (
-                        <div key={post.id} className="post-card">
-                            <h2>{post.title}</h2>
-                            <p>{post.content}</p>
-                            <p>{post.tags}</p>
-                            <div className="options">
-                                <Link to={"/edit-post"} className="edit-post">Edit</Link>
-                                <button type="button" className="del-post">Delete</button>
+
+                    {
+                        posts.length !== 0 &&
+                        posts.map((value, index) => (
+                            <div key={index} className="post-card">
+                                <h2>{value.title}</h2>
+                                <p>{value.content}</p>
+                                <p>{value.tags}</p>
+                                <div className="options">
+                                    <Link to={"/edit-post"} state={value.id} className="edit-post">Edit</Link>
+                                    <button type="button" className="del-post">Delete</button>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    }
+                    {
+                        posts.length===0 &&
+                        <h2>No Posts Found</h2>
+                    }
                 </div>
 
                 <div className="confirm-del">

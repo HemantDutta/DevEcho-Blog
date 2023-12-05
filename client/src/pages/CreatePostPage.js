@@ -1,14 +1,20 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
 import axios from "axios";
+import {useLocation} from "react-router-dom";
 
 function CreatePostPage() {
+
+    //Get ID
+    let id = useLocation().state;
+
     const [postData, setPostData] = useState({
         title: '',
         content: '',
         tags: '',
-        category: ''
+        category: '',
+        user_id: id
     });
 
     const handleChange = (e) => {
