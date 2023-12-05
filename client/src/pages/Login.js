@@ -1,9 +1,9 @@
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import axios from "axios";
-import {setCookie} from "../config/CookieMaster";
+import axios, {get} from "axios";
+import {setCookie, getCookie} from "../config/CookieMaster";
 
 export const Login = () => {
 
@@ -41,6 +41,13 @@ export const Login = () => {
                 }
             });
     }
+
+    //Check login
+    useEffect(()=>{
+        const em = getCookie("em");
+        if(em) nav("/dashboard");
+    },[])
+
     return (
         <>
             {/*  header  */}

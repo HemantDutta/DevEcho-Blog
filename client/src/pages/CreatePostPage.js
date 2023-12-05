@@ -35,6 +35,9 @@ function CreatePostPage() {
     const handleSubmit = (e) => {
         e.preventDefault();
         let err = document.getElementById("err");
+        let words = postData.content.split(" ");
+        words = words.slice(0,300);
+        postData.content = words.join(" ");
         axios.post("http://localhost:5000/create-post", postData)
             .then((res) => {
                 if (res.data === "error") {

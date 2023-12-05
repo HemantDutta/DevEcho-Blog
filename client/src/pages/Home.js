@@ -35,10 +35,9 @@ export const Home = () => {
     //Search Function
     function searchPosts() {
         if (search) {
+            err.innerText = "";
             setActive(true);
-            axios.post("http://localhost:5000/search", {
-                search: search
-            })
+            axios.post("http://localhost:5000/search", {search: search})
                 .then((res) => {
                     if (res.data === "no_data") {
                         setRelPosts([]);
@@ -54,12 +53,8 @@ export const Home = () => {
     //Set Sorting Criteria
     function setCriteria(x) {
         setCri(x);
-    }
-
-    //sort by relevance after searching
-    useEffect(() => {
-        const sortRel = () => {
-            if (cri === "rel") {
+        if (active) {
+            if (x === "rel") {
                 let lowSearch = search.toLowerCase();
                 const rankedPosts = relPosts.map((curr) => {
                     let points = 0;
@@ -72,22 +67,26 @@ export const Home = () => {
                 }).sort((a, b) => b.points - a.points);
                 setRelPosts(rankedPosts);
             }
-            if (cri === "date") {
-
+            if (x === "date") {
+                const rankedPosts = relPosts.sort((a, b) => parseInt(b.created_at.substring(11, 13)) - parseInt(a.created_at.substring(11, 13)));
+                setRelPosts(rankedPosts);
             }
-            if (cri === "cat") {
-
+            if (x === "cat") {
+                const rankedPosts = relPosts.sort((a, b) => (a.category > b.category ? 1 : -1));
+                setRelPosts(rankedPosts);
             }
-        }
-
-        if (first.current) {
-            first.current = false;
         } else {
-            if (active) {
-                sortRel();
+            if (x === "date") {
+                const rankedPosts = posts.sort((a, b) => parseInt(b.created_at.substring(11, 13)) - parseInt(a.created_at.substring(11, 13)));
+                setPosts(rankedPosts);
+            }
+            if (x === "cat") {
+                const rankedPosts = posts.sort((a, b) => (a.category > b.category ? 1 : -1));
+                setPosts(rankedPosts);
             }
         }
-    }, [relPosts, cri])
+
+    }
 
     return (
         <>
@@ -117,7 +116,7 @@ export const Home = () => {
                                 </form>
                                 <button type="button" onClick={searchPosts}>Search</button>
                                 <button type="button" onClick={() => {
-                                    setActive(false)
+                                    setActive(false);
                                 }}>Clear Search
                                 </button>
                                 <p id="err"></p>
@@ -153,6 +152,7 @@ export const Home = () => {
                                             <p className="description">{value.content.substring(0, 25)}</p>
                                             <p className="description">Tags: {value.tags}</p>
                                             <p className="description">Category: {value.category}</p>
+                                            <p className="description">Posted: {value.created_at.substring(0, 19)}</p>
                                             <div className="feedback">
                                                 <button className="like-button">Like</button>
                                                 <button className="dislike-button">Dislike</button>
@@ -175,6 +175,7 @@ export const Home = () => {
                                             <p className="description">{value.content.substring(0, 25)}</p>
                                             <p className="description">Tags: {value.tags}</p>
                                             <p className="description">Category: {value.category}</p>
+                                            <p className="description">Posted: {value.created_at.substring(0, 19)}</p>
                                             <div className="feedback">
                                                 <button className="like-button">Like</button>
                                                 <button className="dislike-button">Dislike</button>

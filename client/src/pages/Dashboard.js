@@ -3,7 +3,7 @@ import {Footer} from "../components/Footer";
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
-import {getCookie} from "../config/CookieMaster";
+import {getCookie, delCookie} from "../config/CookieMaster";
 
 export const Dashboard = () => {
 
@@ -108,6 +108,12 @@ export const Dashboard = () => {
             });
     }
 
+    //Logout
+    function logout(){
+        delCookie("em");
+        nav("/");
+    }
+
     return (
         <>
             {/*Header */}
@@ -118,8 +124,11 @@ export const Dashboard = () => {
                     <h1>Welcome, {user.name}</h1>
                     <p>Email: {user.email}</p>
                 </div>
-                <Link to={"/new-post"} state={user.id} className="new-post-button">Create New Blog Post</Link>
-                <p>Total posts: {posts.length}</p>
+                <div className="options">
+                    <Link to={"/new-post"} state={user.id} className="new-post-button">Create New Blog Post</Link>
+                    <button type="button" onClick={logout}>Logout</button>
+                    <p>Total posts: {posts.length}</p>
+                </div>
                 <div className="post-grid">
                     {
                         posts.length !== 0 &&

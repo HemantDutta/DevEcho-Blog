@@ -1,10 +1,19 @@
 import {useState} from "react";
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
+import {getCookie} from "../config/CookieMaster";
+import {useEffect} from "react";
 
 export const Register = () => {
+
+    //Navigator
+    let nav = useNavigate();
+
+    //Err
+    let err = document.getElementById("err");
+
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -22,11 +31,34 @@ export const Register = () => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        axios.post("http://localhost:5000/sign-up", formData)
-            .then((res) => {
-                console.log(res.data);
-            });
+
+        if(formData.password !== formData.confirmPassword) {
+            err.innerText = "Password and confirm password do not match!";
+        }
+        else {
+            axios.post("http://localhost:5000/sign-up", formData)
+                .then((res) => {
+                    if(res.data === "success") {
+                        err.innerText = "Sign up successful!";
+                        setTimeout(()=>{
+                            nav("/login");
+                        },2000)
+                    }
+                    else if (res.data === "error") {
+                        err.innerText = "Something went wrong!";
+                    }
+                    else if (res.data === "exists") {
+                        err.innerText = "Account already exists";
+                    }
+                });
+        }
     }
+
+    //Check login
+    useEffect(()=>{
+        const em = getCookie("em");
+        if(em) nav("/dashboard");
+    },[])
 
     return (
         <>
@@ -81,6 +113,7 @@ export const Register = () => {
 
                     <button type="submit">Register</button>
                 </form>
+                <p id="err"></p>
                 <div className="exists">
                     <Link to={"/login"}>Already have an account?</Link>
                 </div>
