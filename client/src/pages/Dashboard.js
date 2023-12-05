@@ -1,7 +1,7 @@
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
 import {Link, useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {getCookie} from "../config/CookieMaster";
 
@@ -9,6 +9,9 @@ export const Dashboard = () => {
 
     //Navigator
     let nav = useNavigate();
+
+    //refs
+    const first = useRef(true);
 
     //States
     const [user, setUser] = useState([]);
@@ -32,6 +35,11 @@ export const Dashboard = () => {
                 });
         };
 
+        fetchData();
+    }, [])
+
+    //Fetch Posts
+    useEffect(() => {
         const fetchUserData = () => {
             axios.post("http://localhost:5000/fetch-user-posts", {
                 user_id: user.id
@@ -40,9 +48,12 @@ export const Dashboard = () => {
                     setPosts(res.data);
                 });
         }
-
-        fetchData();
-    }, [])
+        if (first.current) {
+            first.current = false;
+        } else {
+            fetchUserData();
+        }
+    }, [user])
 
     return (
         <>
@@ -74,7 +85,7 @@ export const Dashboard = () => {
                         ))
                     }
                     {
-                        posts.length===0 &&
+                        posts.length === 0 &&
                         <h2>No Posts Found</h2>
                     }
                 </div>

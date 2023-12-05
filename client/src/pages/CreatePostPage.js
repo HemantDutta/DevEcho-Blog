@@ -27,9 +27,18 @@ function CreatePostPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        let err = document.getElementById("err");
         axios.post("http://localhost:5000/create-post", postData)
             .then((res) => {
-               console.log(res.data);
+               if(res.data === "error") {
+                    err.innerText = "Something went wrong! Try again!";
+               }
+               else if (res.data === "success") {
+                    err.innerText = "New Post Created!";
+                    setTimeout(()=>{
+                        err.innerText = "";
+                    },2000);
+               }
             });
     };
 
@@ -82,6 +91,7 @@ function CreatePostPage() {
 
                     <button type="submit">Create Post</button>
                 </form>
+                <p id="err"></p>
             </div>
             <Footer/>
         </>

@@ -1,14 +1,35 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Navbar} from "../components/Navbar";
 import {Footer} from "../components/Footer";
 import axios from "axios";
+import {useLocation, useNavigate} from "react-router-dom";
 
 function EditPostPage() {
-    const [postData, setPostData] = useState({
-        title: 'Sample Post Title', // Sample data for demonstration
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget justo vel justo luctus congue.',
-        tags: '',
-    });
+
+    //Navigator
+    let nav = useNavigate();
+
+    //Get Post ID
+    let post_id = useLocation().state;
+
+    const [postData, setPostData] = useState([]);
+
+    let err = document.getElementById("err");
+
+    //Get Post Details
+    useEffect(() => {
+        axios.post("http://localhost:5000/get-post-details", {
+            id: post_id
+        })
+            .then((res) => {
+                if (res.data === "no-data") {
+                    err.innerText = "Something went wrong!"
+                } else {
+                    console.log(res.data);
+                    setPostData(res.data[0]);
+                }
+            })
+    }, [])
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -20,6 +41,17 @@ function EditPostPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        axios.post("http://localhost:5000/edit-post", postData)
+            .then((res) => {
+                if (res.data === "error") {
+                    err.innerText = "Something went wrong!";
+                } else {
+                   err.innerText = "Post Edited Successfully!";
+                   setTimeout(()=>{
+                        nav("/dashboard");
+                   },2000)
+                }
+            });
     };
 
     return (
@@ -36,7 +68,7 @@ function EditPostPage() {
                         type="text"
                         id="title"
                         name="title"
-                        value={postData.title}
+                        defaultValue={postData.title}
                         onChange={handleChange}
                         required
                     />
@@ -45,7 +77,7 @@ function EditPostPage() {
                     <textarea
                         id="content"
                         name="content"
-                        value={postData.content}
+                        defaultValue={postData.content}
                         onChange={handleChange}
                         required
                     />
@@ -55,7 +87,7 @@ function EditPostPage() {
                         type="text"
                         id="tags"
                         name="tags"
-                        value={postData.tags}
+                        defaultValue={postData.tags}
                         onChange={handleChange}
                         required
                     />
@@ -63,6 +95,7 @@ function EditPostPage() {
                     <label htmlFor="categories">Categories</label>
                     <select name="categories" id="categories">
                         <option value="#">Select a category</option>
+                        <option value={postData.category} selected="true">{postData.category}</option>
                         <option value="#">Category 1</option>
                         <option value="#">Category 2</option>
                         <option value="#">Category 3</option>
@@ -70,6 +103,7 @@ function EditPostPage() {
 
                     <button type="submit">Save Changes</button>
                 </form>
+                <p id="err"></p>
             </div>
             <Footer/>
         </>
